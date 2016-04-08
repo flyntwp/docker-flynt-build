@@ -1,45 +1,17 @@
 FROM ubuntu:14.04
 
-# install ssh-server
-RUN apt-get update && \
-    apt-get install -y openssh-server && \
-    mkdir /var/run/sshd && \
-    sed -i 's/PermitRootLogin without-password/PermitRootLogin yes/' /etc/ssh/sshd_config && \
-    sed 's@session\s*required\s*pam_loginuid.so@session optional pam_loginuid.so@g' -i /etc/pam.d/sshd
-
-# install node
-# Replace shell with bash so we can source files
-RUN rm /bin/sh && ln -s /bin/bash /bin/sh
-
 # Set debconf to run non-interactively
 RUN echo 'debconf debconf/frontend select Noninteractive' | debconf-set-selections
 
 # Install base dependencies
 RUN apt-get update && apt-get install -y -q --no-install-recommends \
-        apt-transport-https \
-        build-essential \
-        ca-certificates \
-        curl \
-        git \
-        libssl-dev \
-        python \
-        rsync \
-        software-properties-common \
-        wget
-
-ENV NVM_DIR /usr/local/nvm
-ENV NODE_VERSION 0.12.6
+	git \
+	ca-certificates \
+        curl
 
 # Install nvm with node and npm
-RUN curl https://raw.githubusercontent.com/creationix/nvm/v0.24.0/install.sh | bash \
-    && source $NVM_DIR/nvm.sh \
-    && nvm install $NODE_VERSION \
-    && nvm alias default $NODE_VERSION \
-    && nvm use default \
-    && npm install -g npm
-
-ENV NODE_PATH $NVM_DIR/v$NODE_VERSION/lib/node_modules
-ENV PATH      $NVM_DIR/v$NODE_VERSION/bin:$PATH
+RUN curl -sL https://deb.nodesource.com/setup_4.x | bash - \
+    && apt-get install -y -q --no-install-recommends nodejs
 
 # dependencies
 RUN apt-get update && \
@@ -54,6 +26,3 @@ RUN apt-get update && \
 	graphicsmagick \
    && rm -rf /var/lib/apt/lists/*
 
-EXPOSE 22
-# CMD ["/usr/sbin/sshd", "-D"]
-CMD ["/usr/sbin/sshd"]
