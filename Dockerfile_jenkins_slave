@@ -1,50 +1,26 @@
-FROM ubuntu:14.04
+FROM ubuntu:16.04
 
 # Set debconf to run non-interactively
 RUN echo 'debconf debconf/frontend select Noninteractive' | debconf-set-selections
 
-# Install base dependencies
-RUN apt-get update && apt-get install -y -q --no-install-recommends \
-	git \
-	ca-certificates \
-        curl
-
-# Install nvm with node and npm
-RUN curl -sL https://deb.nodesource.com/setup_6.x | bash - \
-    && apt-get install -y -q --no-install-recommends nodejs
-
-RUN curl -sS https://dl.yarnpkg.com/debian/pubkey.gpg | apt-key add - && \
-	echo "deb http://dl.yarnpkg.com/debian/ stable main" | tee /etc/apt/sources.list.d/yarn.list && \
-	apt-get update && apt-get install yarn
-
 RUN locale-gen en_US.UTF-8
 ENV LANG       en_US.UTF-8
 ENV LC_ALL     en_US.UTF-8
-RUN apt-get install -y -q --no-install-recommends python-software-properties \
-    software-properties-common && \
-    add-apt-repository -y ppa:ondrej/php && \
-    apt-get update && \
-    apt-get install -y -q --no-install-recommends php7.0 \
-	php7.0-curl \
-        php7.0-xml
 
-RUN php -r "copy('https://getcomposer.org/installer', 'composer-setup.php');" && \
-    php -r "if (hash_file('SHA384', 'composer-setup.php') === 'aa96f26c2b67226a324c27919f1eb05f21c248b987e6195cad9690d5c1ff713d53020a02ac8c217dbf90a7eacc9d141d') { echo 'Installer verified'; } else { echo 'Installer corrupt'; unlink('composer-setup.php'); } echo PHP_EOL;" && \
-    php composer-setup.php && \
-    php -r "unlink('composer-setup.php');" && \
-    mv composer.phar /usr/local/bin/composer
+COPY ./scripts/base.sh /build_scripts/base.sh
+RUN /build_scripts/base.sh
 
-# dependencies
-RUN apt-get update && \
-    apt-get install -y -q --no-install-recommends \
-        libcairo2-dev \
-        libjpeg8-dev \
-        libpango1.0-dev \
-	libgif-dev \
-	build-essential \
-	g++ \
-        imagemagick \
-	graphicsmagick \
-	unzip \
-   && rm -rf /var/lib/apt/lists/*
+COPY ./scripts/node_6.sh /build_scripts/node_6.sh
+RUN /build_scripts/node_6.sh
 
+COPY ./scripts/yarn.sh /build_scripts/yarn.sh
+RUN /build_scripts/yarn.sh
+
+COPY ./scripts/php7.0.sh /build_scripts/php7.0.sh
+RUN /build_scripts/php7.0.sh
+
+COPY ./scripts/composer.sh /build_scripts/composer.sh
+RUN /build_scripts/composer.sh
+
+COPY ./scripts/deps.sh /build_scripts/deps.sh
+RUN /build_scripts/deps.sh
