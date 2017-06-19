@@ -32,9 +32,9 @@ docker run --rm -e UID=`id -u $USER` -e GID=`id -g $USER` -v /path/to/your/sourc
 
 ## Contribute
 
-PRs accepted.
+To contribute, please use GitHub [issues](https://github.com/flyntwp/docker-flynt-build/issues). Pull requests are accepted. Please also take a moment to read the [Contributing Guidelines](https://github.com/flyntwp/guidelines/blob/master/CONTRIBUTING.md) and [Code of Conduct](https://github.com/flyntwp/guidelines/blob/master/CODE_OF_CONDUCT.md).
 
-Small note: If editing the README, please conform to the [standard-readme](https://github.com/RichardLitt/standard-readme) specification.
+If editing the README, please conform to the [standard-readme](https://github.com/RichardLitt/standard-readme) specification.
 
 ## License
 
