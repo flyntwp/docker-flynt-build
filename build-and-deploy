@@ -1,0 +1,24 @@
+#!/bin/bash
+
+set -x
+
+dir="$1"
+repo=$(jq -r '.name' ./${dir}/package.json)
+tag=$(jq -r '.version' ./${dir}/package.json)
+image="$repo:$tag"
+
+set +e
+docker pull $image
+
+if [ $? -ne 0 ]; then
+  set -e
+  cd $dir
+  docker build --pull -t $image .
+  set +e
+  if [ "$TRAVIS_BRANCH" == "master" ]; then docker login -u="$DOCKER_USERNAME" -p="$DOCKER_PASSWORD";
+    set -e
+    docker push $image
+  fi
+fi
+
+exit 0

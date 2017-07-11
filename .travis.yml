@@ -5,16 +5,17 @@ language: bash
 services: docker
 env:
   matrix:
-  - VARIANT=php7.0/node6
+  - REPO=flynt-apache
+  - REPO=flynt-build
+  - REPO=flynt-cli
+  - REPO=flynt-php
+  - REPO=flynt-varnish
   global:
   - DOCKER_ORGA=bleech
   - DOCKER_REPO=flynt-build
   - secure: "kXs+kQXHYOuWP+K9p1QdH0bL5BcIhWAnxxTtwQpfrTZa7+cwHlckaY02AMHphgQYPp3PO19eViq2Apa29x2dQ2tDZ0/PsBta9b3GyP7W8U0C7sghqnTJg9yqA2uhiJeo1I8dqUym5XHgeB2Kez5YoHazopHZZA6oKFgtl9uWPUNzLFcJQoc1zimOl3oVlcrX/y706MR20MwMpasVXnBwWuZmPMVVKGlZcdsCPqa4G8O+NgEH5eLBPHSGOAsXE/CNfeDm4b5e9V1Bav91v6rpwsQwDoNDRLVt5k9R1SjZlN7fFYgdUWS8bOlSWQFPC8CxXrqyV42Pw3eT1f5kf5xGS4qA7Mn4pWPAD7gAJIMbBPhQNploU1/SRG+ZMJW+fqSOrn1QBS+4j77hLv5xn+URUfpv6m5kp41VO/GDnjc+kyqjexcGuBLMEhkr8LLmr8O4fRemloyurilQPKHdJ2I4M3aOlKmt8hgsYv+s54jR8qVzTdbd1ZLsLIqHS+qdby3gp9B8Hdi3d5qGDbO1QsrhzJiFZJXWzSjyOl+puuiSpZk8U40qdKFZPvcYpo6lHpWnVHoHHkGFXcMWWucnJ0Q67ARzc8IcNyMANDcNFn2o1sCBhGI7RjRea7YsFPzb7FVFWZB0zZBoHDwy0CF9gS9fXgE2361kYhmaxtfF0fnxLm0="
   - secure: "bhc8l9SZ/udTMQFL1XhDYcC5KViX9qjTjnPehoO5pcVSZaLVi7X5UQNdrV7umZyd3MypcJ5h9OMIPoIcblFDoIqs/9ZowNcRbCynte2ESI5ZH+YdcOQSmpRz7X98DoDytc4GrtkOZoXhkppjT5BVZVREQAwsUQ/TeqQtquhHkTRnrdco0uxNYAprPKTYY1ZLYbV7UJtlAxhXZs/TOybRTZakrcIEBmQfk1YBq5wq/Gtps7vmoCvDfTBoDz7eeu0fV1zxa9GBy9Y04/a/W/PpA4HigGDx061t3p3klxCqFT3HbwVDdMuDGp/AeNmmSe/M+00wYLKkWF6CoHfgb3xEtlORw87VS29FX+cuPdL2Vr5ycUw5iHZHkp0poKu2SLcT18DLWW67ijdNEVVy/YDIYlcCGS6s9Dk+4l8E5MgQUeEuyosO19NYTK4eS3cxGEpHJrO5G4phlyCkn/rf+0CXDBGUr1sE2q9U1DK34v3iIg6/yK48ITy7sw8qpliwivYYLsLeSAvRR/lvhhtVFvheyculTaaEWHUK1c4AAj/A8lVxT+5z11nPWiHjQnvnmiRk3ij4HMuijesScxlu35HaVe6X0j9jtjuAbQRvXyDSqSloLvvSmMK9XcNx/Kn1cH2FYfW6fl/WSyqJMq2Uw7sRO90/TosjPNMI2gewYkkdP5E="
-before_script:
-- slash='/'; image="$DOCKER_ORGA/$DOCKER_REPO:${VARIANT//$slash/-}"
-script:
-- travis_retry docker build -t "$image" .
-after_script:
-- if [ "$TRAVIS_BRANCH" == "master" ]; then docker login -u="$DOCKER_USERNAME" -p="$DOCKER_PASSWORD";
-  docker push $image; fi
+before_install:
+  - sudo apt-get -qq update
+  - sudo apt-get install -y jq
+script: ./build-and-deploy $REPO
