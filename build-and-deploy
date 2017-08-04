@@ -13,7 +13,7 @@ docker pull $image
 if [ $? -ne 0 ]; then
   set -e
   cd $dir
-  docker build --pull -t $image .
+  docker build --pull --no-cache -t $image .
   set +e
   if [ "$TRAVIS_BRANCH" == "master" ]; then docker login -u="$DOCKER_USERNAME" -p="$DOCKER_PASSWORD";
     set -e
