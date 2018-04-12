@@ -1,4 +1,4 @@
-FROM alpine:3.5
+FROM alpine:3.6
 
 RUN apk add --no-cache --virtual .osDeps \
   git \
@@ -42,6 +42,7 @@ RUN apk add --no-cache --virtual .phpPackages \
   php7-mbstring \
   php7-dom \
   php7-xmlreader && \
+  php7-soap && \
   ln -s /etc/php7 /etc/php && \
   ln -s /usr/bin/php7 /usr/bin/php && \
   ln -s /usr/lib/php7 /usr/lib/php
@@ -55,24 +56,26 @@ RUN curl -O https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli
   chmod +x wp-cli.phar && \
   mv wp-cli.phar /usr/bin/wp
 
-RUN mkdir -p /var/www/html/vendor
-RUN mkdir -p /var/www/html/web/app/themes
-RUN mkdir -p /var/www/html/web/app/uploads
-RUN mkdir -p /var/www/html/web/wp
-RUN mkdir -p /var/www/html/theme/node_modules
-RUN mkdir -p /var/www/html/theme/bower_components
+# RUN mkdir -p /var/www/html/vendor
+# RUN mkdir -p /var/www/html/web/app/themes
+# RUN mkdir -p /var/www/html/web/app/uploads
+# RUN mkdir -p /var/www/html/web/wp
+# RUN mkdir -p /var/www/html/theme/node_modules
+# RUN mkdir -p /var/www/html/theme/bower_components
 
-RUN addgroup -g 82 www-data && \
-  adduser -u 82 -G www-data -s /bin/sh -D www-data
+# RUN addgroup -g 82 www-data && \
+#   adduser -u 82 -G www-data -s /bin/sh -D www-data
 
-RUN chown -R www-data:www-data /var/www/html
+# RUN chown -R www-data:www-data /var/www/html
 # RUN chown -R flynt:flynt /var/www/html/vendor
 # RUN chown -R flynt:flynt /var/www/html/theme
 
-USER www-data
+# USER www-data
 
-RUN mkdir -p /home/www-data/.composer
-RUN mkdir -p /home/www-data/.ssh
+# RUN mkdir -p /home/www-data/.composer
+# RUN mkdir -p /home/www-data/.ssh
+RUN mkdir -p /root/.composer
+RUN mkdir -p /root/.ssh
 
 WORKDIR /var/www/html
 
