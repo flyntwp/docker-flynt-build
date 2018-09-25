@@ -1,5 +1,6 @@
 #! /bin/bash
 # Install Ruby
+apt-get update
 apt-get install -y -q --no-install-recommends python-software-properties \
   software-properties-common
 add-apt-repository -y ppa:brightbox/ruby-ng

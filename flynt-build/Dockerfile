@@ -11,8 +11,8 @@ ENV LANG en_US.utf8
 COPY ./scripts/base.sh /build_scripts/base.sh
 RUN /build_scripts/base.sh
 
-COPY ./scripts/php7.0.sh /build_scripts/php7.0.sh
-RUN /build_scripts/php7.0.sh
+COPY ./scripts/php7.1.sh /build_scripts/php7.1.sh
+RUN /build_scripts/php7.1.sh
 
 COPY ./scripts/composer.sh /build_scripts/composer.sh
 RUN /build_scripts/composer.sh
