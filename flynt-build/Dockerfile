@@ -11,14 +11,14 @@ ENV LANG en_US.utf8
 COPY ./scripts/base.sh /build_scripts/base.sh
 RUN /build_scripts/base.sh
 
-COPY ./scripts/php7.1.sh /build_scripts/php7.1.sh
-RUN /build_scripts/php7.1.sh
+COPY ./scripts/php7.2.sh /build_scripts/php7.2.sh
+RUN /build_scripts/php7.2.sh
 
 COPY ./scripts/composer.sh /build_scripts/composer.sh
 RUN /build_scripts/composer.sh
 
-COPY ./scripts/node8.sh /build_scripts/node8.sh
-RUN /build_scripts/node8.sh
+COPY ./scripts/node6.sh /build_scripts/node6.sh
+RUN /build_scripts/node6.sh
 
 COPY ./scripts/yarn.sh /build_scripts/yarn.sh
 RUN /build_scripts/yarn.sh
