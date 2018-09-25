@@ -1,4 +1,4 @@
-FROM alpine:3.6
+FROM alpine:3.7
 
 RUN apk add --no-cache --virtual .osDeps \
   git \
@@ -10,8 +10,9 @@ RUN apk add --no-cache --virtual .osDeps \
 
 RUN apk add --no-cache --virtual .runDeps \
   mysql-client \
-  # php7 \
-  nodejs
+  php7 \
+  nodejs \
+  nodejs-npm
   # yarn
 
 RUN npm i -g yarn && \
@@ -41,14 +42,17 @@ RUN apk add --no-cache --virtual .phpPackages \
   php7-bcmath \
   php7-mbstring \
   php7-dom \
-  php7-xmlreader && \
-  php7-soap && \
-  ln -s /etc/php7 /etc/php && \
-  ln -s /usr/bin/php7 /usr/bin/php && \
-  ln -s /usr/lib/php7 /usr/lib/php
+  php7-xmlreader \
+  php7-soap \
+  php7-xmlwriter \
+  php7-simplexml \
+  php7-tokenizer && \
+  ln -fs /etc/php7 /etc/php && \
+  ln -fs /usr/bin/php7 /usr/bin/php && \
+  ln -fs /usr/lib/php7 /usr/lib/php
 
 RUN php -r "copy('https://getcomposer.org/installer', 'composer-setup.php');" && \
-  php -r "if (hash_file('SHA384', 'composer-setup.php') === '669656bab3166a7aff8a7506b8cb2d1c292f042046c5a994c43155c0be6190fa0355160742ab2e1c88d40d5be660b410') { echo 'Installer verified'; } else { echo 'Installer corrupt'; unlink('composer-setup.php'); } echo PHP_EOL;" && \
+  php -r "if (hash_file('SHA384', 'composer-setup.php') === '544e09ee996cdf60ece3804abc52599c22b1f40f4323403c44d44fdfdd586475ca9813a858088ffbc1f233e9b180f061') { echo 'Installer verified'; } else { echo 'Installer corrupt'; unlink('composer-setup.php'); } echo PHP_EOL;" && \
   php composer-setup.php --install-dir=/usr/bin --filename=composer && \
   php -r "unlink('composer-setup.php');"
 
@@ -79,6 +83,6 @@ RUN mkdir -p /root/.ssh
 
 WORKDIR /var/www/html
 
-COPY init.sh /usr/bin/
+# COPY init.sh /usr/bin/
 
-ENTRYPOINT ["init.sh"]
+# ENTRYPOINT ["init.sh"]
