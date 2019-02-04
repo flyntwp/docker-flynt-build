@@ -1,4 +1,4 @@
-FROM alpine:3.7
+FROM alpine:3.8
 
 RUN apk add --no-cache --virtual .osDeps \
   git \
@@ -17,7 +17,7 @@ RUN apk add --no-cache --virtual .runDeps \
 
 RUN npm i -g yarn && \
   yarn global add \
-    gulp \
+    gulp@3.9.1 \
     bower \
     @flyntwp/flynt-cli
 
@@ -52,7 +52,7 @@ RUN apk add --no-cache --virtual .phpPackages \
   ln -fs /usr/lib/php7 /usr/lib/php
 
 RUN php -r "copy('https://getcomposer.org/installer', 'composer-setup.php');" && \
-  php -r "if (hash_file('SHA384', 'composer-setup.php') === '544e09ee996cdf60ece3804abc52599c22b1f40f4323403c44d44fdfdd586475ca9813a858088ffbc1f233e9b180f061') { echo 'Installer verified'; } else { echo 'Installer corrupt'; unlink('composer-setup.php'); } echo PHP_EOL;" && \
+  php -r "if (hash_file('SHA384', 'composer-setup.php') === '93b54496392c062774670ac18b134c3b3a95e5a5e5c8f1a9f115f203b75bf9a129d5daa8ba6a13e2cc8a1da0806388a8') { echo 'Installer verified'; } else { echo 'Installer corrupt'; unlink('composer-setup.php'); } echo PHP_EOL;" && \
   php composer-setup.php --install-dir=/usr/bin --filename=composer && \
   php -r "unlink('composer-setup.php');"
 
